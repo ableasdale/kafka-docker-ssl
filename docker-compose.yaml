@@ -2,7 +2,7 @@
 version: "3"
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.3.1
+    image: confluentinc/cp-zookeeper:${CP_TAG}
     container_name: zookeeper
     networks:
        kafka:
@@ -19,7 +19,7 @@ services:
       - zk-txn-logs:/var/lib/zookeeper/log
     
   broker:
-    image: confluentinc/cp-enterprise-kafka:5.3.1
+    image: confluentinc/cp-server:${CP_TAG}
     container_name: broker
     networks:
        kafka:
@@ -53,9 +53,9 @@ services:
       CONFLUENT_METRICS_REPORTER_SECURITY_PROTOCOL: SSL
       CONFLUENT_METRICS_REPORTER_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.metrics.truststore.jks
       CONFLUENT_METRICS_REPORTER_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.metrics.keystore.jks
-      CONFLUENT_METRICS_REPORTER_SSL_TRUSTSTORE_PASSWORD: awesomekafka
-      CONFLUENT_METRICS_REPORTER_SSL_KEYSTORE_PASSWORD: awesomekafka
-      CONFLUENT_METRICS_REPORTER_SSL_KEY_PASSWORD: awesomekafka
+      CONFLUENT_METRICS_REPORTER_SSL_TRUSTSTORE_PASSWORD: confluent
+      CONFLUENT_METRICS_REPORTER_SSL_KEYSTORE_PASSWORD: confluent
+      CONFLUENT_METRICS_REPORTER_SSL_KEY_PASSWORD: confluent
       CONFLUENT_METRICS_ENABLE: "true"
       CONFLUENT_SUPPORT_CUSTOMER_ID: anonymous
     volumes:
@@ -63,7 +63,7 @@ services:
       - ./secrets:/etc/kafka/secrets
 
   schema-registry:
-    image: confluentinc/cp-schema-registry:5.3.1
+    image: confluentinc/cp-schema-registry:${CP_TAG}
     depends_on:
       - zookeeper
       - broker
@@ -84,21 +84,21 @@ services:
       SCHEMA_REGISTRY_LOG4J_LOGLEVEL: ERROR
       SCHEMA_REGISTRY_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.schema-registry.truststore.jks
       SCHEMA_REGISTRY_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.schema-registry.keystore.jks
-      SCHEMA_REGISTRY_SSL_TRUSTSTORE_PASSWORD: awesomekafka
-      SCHEMA_REGISTRY_SSL_KEYSTORE_PASSWORD: awesomekafka
-      SCHEMA_REGISTRY_SSL_KEY_PASSWORD: awesomekafka
+      SCHEMA_REGISTRY_SSL_TRUSTSTORE_PASSWORD: confluent
+      SCHEMA_REGISTRY_SSL_KEYSTORE_PASSWORD: confluent
+      SCHEMA_REGISTRY_SSL_KEY_PASSWORD: confluent
       SCHEMA_REGISTRY_KAFKASTORE_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
       SCHEMA_REGISTRY_KAFKASTORE_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.schema-registry.truststore.jks
       SCHEMA_REGISTRY_KAFKASTORE_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.schema-registry.keystore.jks
-      SCHEMA_REGISTRY_KAFKASTORE_SSL_TRUSTSTORE_PASSWORD: awesomekafka
-      SCHEMA_REGISTRY_KAFKASTORE_SSL_KEYSTORE_PASSWORD: awesomekafka
-      SCHEMA_REGISTRY_KAFKASTORE_SSL_KEY_PASSWORD: awesomekafka
+      SCHEMA_REGISTRY_KAFKASTORE_SSL_TRUSTSTORE_PASSWORD: confluent
+      SCHEMA_REGISTRY_KAFKASTORE_SSL_KEYSTORE_PASSWORD: confluent
+      SCHEMA_REGISTRY_KAFKASTORE_SSL_KEY_PASSWORD: confluent
       SCHEMA_REGISTRY_SSL_CLIENT_AUTH: "true"
     volumes:
       - ./secrets:/etc/kafka/secrets
 
   control-center:
-    image: confluentinc/cp-enterprise-control-center:5.3.1
+    image: confluentinc/cp-enterprise-control-center:${CP_TAG}
     container_name: control-center
     networks:
        kafka:
@@ -120,9 +120,9 @@ services:
       CONTROL_CENTER_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: ""
       CONTROL_CENTER_STREAMS_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.control-center.truststore.jks
       CONTROL_CENTER_STREAMS_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.control-center.keystore.jks
-      CONTROL_CENTER_STREAMS_SSL_TRUSTSTORE_PASSWORD: awesomekafka
-      CONTROL_CENTER_STREAMS_SSL_KEYSTORE_PASSWORD: awesomekafka
-      CONTROL_CENTER_STREAMS_SSL_KEY_PASSWORD: awesomekafka
+      CONTROL_CENTER_STREAMS_SSL_TRUSTSTORE_PASSWORD: confluent
+      CONTROL_CENTER_STREAMS_SSL_KEYSTORE_PASSWORD: confluent
+      CONTROL_CENTER_STREAMS_SSL_KEY_PASSWORD: confluent
       CONTROL_CENTER_STREAMS_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: "HTTPS"
       CONTROL_CENTER_REPLICATION_FACTOR: 1
       CONTROL_CENTER_INTERNAL_TOPICS_PARTITIONS: 1
@@ -130,14 +130,14 @@ services:
       CONFLUENT_METRICS_TOPIC_REPLICATION: 1
       CONTROL_CENTER_REST_LISTENERS: "http://0.0.0.0:9021"
       CONTROL_CENTER_REST_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.control-center.truststore.jks
-      CONTROL_CENTER_REST_SSL_TRUSTSTORE_PASSWORD: awesomekafka
+      CONTROL_CENTER_REST_SSL_TRUSTSTORE_PASSWORD: confluent
       CONTROL_CENTER_REST_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.control-center.keystore.jks
-      CONTROL_CENTER_REST_SSL_KEYSTORE_PASSWORD: awesomekafka
-      CONTROL_CENTER_REST_SSL_KEY_PASSWORD: awesomekafka
+      CONTROL_CENTER_REST_SSL_KEYSTORE_PASSWORD: confluent
+      CONTROL_CENTER_REST_SSL_KEY_PASSWORD: confluent
       CONTROL_CENTER_OPTS: -Djavax.net.ssl.trustStore=/etc/kafka/secrets/kafka.control-center.truststore.jks
-                  -Djavax.net.ssl.trustStorePassword=kafka
+                  -Djavax.net.ssl.trustStorePassword=confluent
                   -Djavax.net.ssl.keyStore=/etc/kafka/secrets/kafka.control-center.keystore.jks
-                  -Djavax.net.ssl.keyStorePassword=kafka
+                  -Djavax.net.ssl.keyStorePassword=confluent
       PORT: 9021
     volumes:
       - ./secrets:/etc/kafka/secrets
@@ -159,15 +159,15 @@ services:
       KAFKA_HEAP_OPTS: "-Xmx1G -Xms1G"
       KAFKA_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.kafka-tools.truststore.jks
       KAFKA_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.kafka-tools.keystore.jks
-      KAFKA_SSL_TRUSTSTORE_PASSWORD: awesomekafka
-      KAFKA_SSL_KEYSTORE_PASSWORD: awesomekafka
-      KAFKA_SSL_KEY_PASSWORD: awesomekafka
+      KAFKA_SSL_TRUSTSTORE_PASSWORD: confluent
+      KAFKA_SSL_KEYSTORE_PASSWORD: confluent
+      KAFKA_SSL_KEY_PASSWORD: confluent
     volumes:
       - ./secrets:/etc/kafka/secrets
       - ./config:/etc/kafka/config
 
   rest-proxy:
-    image: confluentinc/cp-kafka-rest:5.3.1
+    image: confluentinc/cp-kafka-rest:${CP_TAG}
     depends_on:
       - zookeeper
       - broker
@@ -184,19 +184,19 @@ services:
       KAFKA_SSL_ENDPOINT_IDENTIFICATION_ALGORITHM: " "
       KAFKA_REST_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.rest-proxy.truststore.jks
       KAFKA_REST_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.rest-proxy.keystore.jks
-      KAFKA_REST_SSL_TRUSTSTORE_PASSWORD: awesomekafka
-      KAFKA_REST_SSL_KEYSTORE_PASSWORD: awesomekafka
-      KAFKA_REST_SSL_KEY_PASSWORD: awesomekafka
+      KAFKA_REST_SSL_TRUSTSTORE_PASSWORD: confluent
+      KAFKA_REST_SSL_KEYSTORE_PASSWORD: confluent
+      KAFKA_REST_SSL_KEY_PASSWORD: confluent
       KAFKA_REST_LOG4J_LOGLEVEL: ERROR
       KAFKA_REST_HOST_NAME: rest-proxy
       KAFKA_REST_BOOTSTRAP_SERVERS: broker.local:19092
       KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper.local:22181
       KAFKA_REST_CLIENT_SECURITY_PROTOCOL: SSL
       KAFKA_REST_CLIENT_SSL_TRUSTSTORE_LOCATION: /etc/kafka/secrets/kafka.rest-proxy.truststore.jks
-      KAFKA_REST_CLIENT_SSL_TRUSTSTORE_PASSWORD: awesomekafka
+      KAFKA_REST_CLIENT_SSL_TRUSTSTORE_PASSWORD: confluent
       KAFKA_REST_CLIENT_SSL_KEYSTORE_LOCATION: /etc/kafka/secrets/kafka.rest-proxy.keystore.jks
-      KAFKA_REST_CLIENT_SSL_KEYSTORE_PASSWORD: awesomekafka
-      KAFKA_REST_CLIENT_SSL_KEY_PASSWORD: awesomekafka
+      KAFKA_REST_CLIENT_SSL_KEYSTORE_PASSWORD: confluent
+      KAFKA_REST_CLIENT_SSL_KEY_PASSWORD: confluent
       KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
       KAFKA_HEAP_OPTS: "-Xmx1G -Xms1G"
     volumes:

@@ -8,7 +8,7 @@ echo "⚠️  Remember to type in \"yes\" for all prompts."
 sleep 2
 
 TLD="local"
-PASSWORD="awesomekafka"
+PASSWORD="confluent"
 
 # Generate CA key
 openssl req -new -x509 -keyout fake-ca-1.key \
@@ -16,7 +16,7 @@ openssl req -new -x509 -keyout fake-ca-1.key \
 	-subj "/CN=ca1.${TLD}/OU=CIA/O=REA/L=Melbourne/S=VIC/C=AU" \
 	-passin pass:$PASSWORD -passout pass:$PASSWORD
 
-for i in broker control-center metrics schema-registry kafka-tools rest-proxy; do
+for i in client broker control-center metrics schema-registry kafka-tools rest-proxy; do
 	echo ${i}
 	# Create keystores
 	keytool -genkey -noprompt \

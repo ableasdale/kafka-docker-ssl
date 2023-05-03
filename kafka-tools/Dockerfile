@@ -1,5 +1,6 @@
-FROM  confluentinc/cp-enterprise-kafka:5.3.1
+FROM  confluentinc/cp-enterprise-kafka:7.3.3
 
+USER root
 # Set up a user to run Kafka
 RUN groupadd kafka && \
   useradd -d /kafka -g kafka -s /bin/false kafka && \
